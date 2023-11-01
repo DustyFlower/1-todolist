@@ -21,12 +21,16 @@ const filterTasks = (buttonName: ButtonNameType) => {
         setFilteredButtonName(buttonName)
     }
 
-    let durshlag = props.tasks
-    if (filteredButtonName === 'Active') {
-        durshlag = props.tasks.filter(el => !el.isDone)
-    }
-    if (filteredButtonName === 'Completed') {
-        durshlag = props.tasks.filter(el => el.isDone)
+    const filteredTasks = () => {
+
+        switch (filteredButtonName) {
+            case 'Active':
+                return  props.tasks.filter(el => !el.isDone);
+            case 'Completed':
+                return  props.tasks.filter(el => el.isDone);
+            default:
+            return props.tasks
+        }
     }
 
     return <div>
@@ -36,7 +40,7 @@ const filterTasks = (buttonName: ButtonNameType) => {
             <button>+</button>
         </div>
         <ul>
-            {durshlag.map(t => {
+            {filteredTasks().map(t => {
                 return (
                     <li key={t.id}>
                         <button onClick={() => props.removeTask(t.id)}>x</button>
