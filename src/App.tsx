@@ -1,41 +1,36 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.css';
-import {Todolist} from './Todolist';
-import {v1} from 'uuid';
+import {TaskType, TodoList} from './TodoList';
 
-export type ButtonNameType = 'All' | 'Active' | 'Completed'
+//CRUD:
+//create
+//read
+//update
+//delete
 
 function App() {
 
-    let [tasks, setTasks] = useState(
-        [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'ReactJS', isDone: false},
-            {id: v1(), title: 'Rest API', isDone: false},
-            {id: v1(), title: 'GraphQL', isDone: false}
-        ])
+    const todoListTitle_1: string = 'What to learn'
+    const todoListTitle_2: string = 'What to buy'
 
-    const removeTask = (id: string) => {
-        /*        tasks = tasks.filter(el=> el.id !== id)*/
-        setTasks(tasks.filter(el => el.id !== id))
-    }
+    let tasks_1:Array<TaskType> = [
+        {id: 1, title: 'HTML&CSS', isDone: true},
+        {id: 1, title: 'JS/ES6', isDone: true},
+        {id: 1, title: 'React', isDone: false}
+    ]
 
-    const addTask = (title: string) => {
-        let newTask = {id: v1(), title: title, isDone: false}
-        let newTasks = [newTask, ...tasks];
-        setTasks(newTasks)
-    }
+    let tasks_2:Array<TaskType> = [
+        {id: 4, title: 'Beer', isDone: true},
+        {id: 5, title: 'Dried fish', isDone: false},
+        {id: 6, title: 'Cheeps', isDone: false}
+    ]
 
     return (
         <div className="App">
-            <Todolist title="What to learn"
-                      tasks={tasks}
-                      removeTask={removeTask}
-                      addTask={addTask}/>
+            <TodoList title={todoListTitle_1} tasks={tasks_1}/>
+            <TodoList title={todoListTitle_2} tasks={tasks_2}/>
         </div>
     );
-
 }
 
 export default App;
