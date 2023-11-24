@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import {TaskType, TodoList} from './TodoList';
 
@@ -9,26 +9,47 @@ import {TaskType, TodoList} from './TodoList';
 //delete
 
 function App() {
+//BLL:
+    const todoListTitle: string = 'What to learn'
 
-    const todoListTitle_1: string = 'What to learn'
-    const todoListTitle_2: string = 'What to buy'
+    //state
+    /*    let tasks: Array<TaskType> = [
+            {id: 1, title: 'HTML&CSS', isDone: true},
+            {id: 1, title: 'JS/ES6', isDone: true},
+            {id: 1, title: 'React', isDone: false}
+        ]*/
 
-    let tasks_1:Array<TaskType> = [
+    const [tasks, setTasks] = useState<Array<TaskType>>([
         {id: 1, title: 'HTML&CSS', isDone: true},
-        {id: 1, title: 'JS/ES6', isDone: true},
-        {id: 1, title: 'React', isDone: false}
-    ]
+        {id: 2, title: 'JS/ES6', isDone: true},
+        {id: 3, title: 'React', isDone: false}
+    ])
 
-    let tasks_2:Array<TaskType> = [
-        {id: 4, title: 'Beer', isDone: true},
-        {id: 5, title: 'Dried fish', isDone: false},
-        {id: 6, title: 'Cheeps', isDone: false}
-    ]
+    //delete
+    const removeTask = (taskId: number) => {
+        const nextState: Array<TaskType> = []
+        for (let i = 0; i < tasks.length; i++) {
+            if (tasks[i].id !== taskId) {
+                nextState.push(tasks[i])
+            }
+        }
+        setTasks(nextState)
+    }
 
+//UI:
     return (
         <div className="App">
-            <TodoList title={todoListTitle_1} tasks={tasks_1}/>
-            <TodoList title={todoListTitle_2} tasks={tasks_2}/>
+            <TodoList title={todoListTitle}
+                      tasks={tasks}
+                      removeTask={removeTask}
+            />
+            {/*            TodoList(
+                {
+                title: 'What to learn',
+                tasks: tasks,
+                removeTask: removeTask
+                }
+            )*/}
         </div>
     );
 }

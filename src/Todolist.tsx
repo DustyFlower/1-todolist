@@ -1,10 +1,12 @@
 import React, {FC} from 'react';
 import './App.css'
 import {Button} from './Button';
+import {TasksList} from './TasksList';
 
-type TodoListPropsType = {
+export type TodoListPropsType = {
     title: string
     tasks: TaskType[]
+    removeTask: (taskId: number) => void
 }
 
 export type TaskType = {
@@ -13,15 +15,21 @@ export type TaskType = {
     isDone: boolean
 }
 
-export const TodoList: FC<TodoListPropsType> = ({title, tasks})=> {
+export const TodoList: FC<TodoListPropsType> = ({title, tasks, removeTask}) => {
+    //1.
+    //const title = props.title
+    //const tasks: Array<TaskType> = props.tasks
+
+    //2.
+    //const {title: myTitle, tasks: myTasks} = props
+
+    //3.
+    //const {title, tasks} = props
 
     const listItems: Array<JSX.Element> = []
     for (let i = 0; i < tasks.length; i++) {
-        const listItem: JSX.Element = <li>
-            <input type="checkbox" checked={tasks[i].isDone}/>
-            <span>{tasks[i].title}</span>
-        </li>
-        listItems.push(listItem)
+        const onClickRemoveTask = () => removeTask(tasks[i].id)
+        listItems.push(<TasksList {...tasks[i]} removeTask={onClickRemoveTask}/>)
     }
 
     return (
@@ -33,7 +41,7 @@ export const TodoList: FC<TodoListPropsType> = ({title, tasks})=> {
             </div>
             <ul>
                 {listItems}
-{/*                {tasks.map(el =>
+                {/*                {tasks.map(el =>
                     <li><input type="checkbox" checked={el.isDone}/> <span>{el.title}</span></li>
                 )}*/}
             </ul>
