@@ -26,12 +26,6 @@ export const TodoList: FC<TodoListPropsType> = ({title, tasks, removeTask}) => {
     //3.
     //const {title, tasks} = props
 
-    const listItems: Array<JSX.Element> = []
-    for (let i = 0; i < tasks.length; i++) {
-        const onClickRemoveTask = () => removeTask(tasks[i].id)
-        listItems.push(<TasksList {...tasks[i]} removeTask={onClickRemoveTask}/>)
-    }
-
     return (
         <div className="todoList">
             <h3>{title}</h3>
@@ -39,17 +33,7 @@ export const TodoList: FC<TodoListPropsType> = ({title, tasks, removeTask}) => {
                 <input/>
                 <Button name={'+'}/>
             </div>
-            <ul>
-                {listItems}
-                {/*                {tasks.map(el =>
-                    <li><input type="checkbox" checked={el.isDone}/> <span>{el.title}</span></li>
-                )}*/}
-            </ul>
-            <div>
-                <Button name={'All'}/>
-                <Button name={'Active'}/>
-                <Button name={'Completed'}/>
-            </div>
+            <TasksList tasks={tasks} removeTask={removeTask}/>
         </div>
     )
 }

@@ -12,3 +12,10 @@
   padding: 15px;
   background-color: blanchedalmond;
 }
+.tasksList {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: darksalmon;
+  margin-top: 15px;
+}
