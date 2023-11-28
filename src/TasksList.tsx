@@ -5,7 +5,7 @@ import './App.css';
 
 type TasksListPropsType = {
     tasks: TaskType[]
-    removeTask: (taskId: number) => void
+    removeTask: (taskId: string) => void
 }
 
 type FilterValueType = 'All' | 'Active' | 'Completed'
