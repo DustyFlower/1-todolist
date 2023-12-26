@@ -6,16 +6,19 @@
 .App > div {
   margin-right: 50px;
 }
-.todoList {
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 15px;
-  background-color: blanchedalmond;
+
+.error {
+  border: red 1px solid;
 }
-.tasksList {
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 5px;
-  background-color: lightsalmon;
-  margin-top: 15px;
+
+.error-message {
+  color: red;
+}
+
+.active-filter {
+  background-color: aquamarine;
+}
+
+.is-done {
+  opacity: 0.5;
 }

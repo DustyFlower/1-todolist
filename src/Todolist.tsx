@@ -1,59 +1,89 @@
-import React, {ChangeEvent, FC, useState, KeyboardEvent} from 'react';
-import './App.css'
-import {Button} from './Button';
-import {TasksList} from './TasksList';
+import React, {ChangeEvent, KeyboardEvent, FC, useState} from 'react';
+import {FilterValuesType} from './App';
+import {log} from 'util';
+import {Simulate} from 'react-dom/test-utils';
+import error = Simulate.error;
 
-export type TodoListPropsType = {
+type PropsType = {
     title: string
     tasks: TaskType[]
     removeTask: (taskId: string) => void
-    addTask: (title: string) => void
+    changeFilter: (FilterType: FilterValuesType) => void
+    addTask: (taskTitle: string) => void
+    changeTaskStatus: (taskId: string, isDone: boolean) => void
+    filter: FilterValuesType
 }
 
-export type TaskType = {
-    id: string,
-    title: string,
+type TaskType = {
+    id: string
+    title: string
     isDone: boolean
 }
 
-export const TodoList: FC<TodoListPropsType> = ({
-                                                    title,
-                                                    tasks,
-                                                    removeTask,
-                                                    addTask
-                                                }) => {
-    const [newTaskTitle, setNewTaskTitle] = useState('')
-    const maxTitleLengthError = newTaskTitle.length >= 20
-    const onClickAddTask = () => {
-        addTask(newTaskTitle)
-        setNewTaskTitle('')
+export const Todolist: FC<PropsType> = ({title, tasks, removeTask, changeFilter, addTask, changeTaskStatus, filter}) => {
+    const [taskTitle, setTaskTitle] = useState('')
+    const [error, setError] = useState<string | null>(null)
+
+    const onAllClickHandler = () => {
+        changeFilter('all')
     }
-    const OnChangeSetTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.currentTarget.value.length <= 20) {
-            setNewTaskTitle(e.currentTarget.value)
+    const onActiveClickHandler = () => {
+        changeFilter('active')
+    }
+    const onCompletedClickHandler = () => {
+        changeFilter('completed')
+    }
+
+    const onClickAddTaskHandler = () => {
+        if (taskTitle.trim() !== '') {
+            addTask(taskTitle.trim())
+            setTaskTitle('')
+        } else {
+            setError('Title is required')
+        }}
+
+        const onChangeAddTaskHandler = (event: ChangeEvent<HTMLInputElement>) => {
+            setTaskTitle(event.currentTarget.value)
         }
-    }
-    const onKeyDownAddTask = (e: KeyboardEvent<HTMLInputElement>) => {
-        e.key === 'Enter'
-        && !!newTaskTitle
-        && newTaskTitle.length < 20
-        && onClickAddTask()
-    }
-    return (
-        <div className="todoList">
-            <h3>{title}</h3>
+
+        const onKeyUpHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+        setError(null)
+            if (event.ctrlKey && event.key === 'Enter') {
+                onClickAddTaskHandler()
+            }
+        }
+        return (
             <div>
-                <input
-                    value={newTaskTitle}
-                    onChange={OnChangeSetTitle}
-                    onKeyDown={onKeyDownAddTask}
-                />
-                <Button name="+"
-                        onClickHandler={onClickAddTask}
-                        disabled={!newTaskTitle || maxTitleLengthError}/>
-                {maxTitleLengthError && <div style={{color: 'red'}}>Your task title is too long</div>}
+                <h3>{title}</h3>
+                <div>
+                    <input value={taskTitle}
+                           onChange={onChangeAddTaskHandler}
+                           onKeyUp={onKeyUpHandler}
+                           className={error ? 'error' : ''}/>
+                    <button onClick={onClickAddTaskHandler}>+</button>
+                    {error && <div className="error-message">{error}</div>}
+                </div>
+                <ul>
+                    {tasks.map(t => {
+                        const onClickHandler = () => {
+                            removeTask(t.id)
+                        }
+                        const onChangeCheckboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                            changeTaskStatus(t.id, e.currentTarget.checked)
+                        }
+                        return <li key={t.id} className={t.isDone ?'is-done' : ''}>
+                            <button onClick={onClickHandler}>✖️
+                            </button>
+                            <input type="checkbox" onChange={onChangeCheckboxHandler} checked={t.isDone}/>
+                            <span>{t.title}</span></li>
+                    })}
+                </ul>
+                <div>
+                    <button className={filter === 'all' ?'active-filter': ''} onClick={onAllClickHandler}>All</button>
+                    <button className={filter === 'active' ?'active-filter': ''} onClick={onActiveClickHandler}>Active
+                    </button>
+                    <button className={filter === 'completed' ?'active-filter': ''} onClick={onCompletedClickHandler}>Completed</button>
+                </div>
             </div>
-            <TasksList tasks={tasks} removeTask={removeTask}/>
-        </div>
-    )
-}
+        )
+    }
